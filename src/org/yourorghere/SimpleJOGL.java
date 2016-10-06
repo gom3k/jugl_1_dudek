@@ -105,48 +105,59 @@ public class SimpleJOGL implements GLEventListener {
 //            gl.glVertex3f(0.5f, -1.0f, -8.0f);
 //            gl.glVertex3f(-0.5f, -1.0f, -8.0f);
 //        gl.glEnd();
+        //============== DOM ============= 
+//        gl.glBegin(GL.GL_QUADS);
+//            gl.glColor3f(1.0f,1.0f,0.0f);
+//            gl.glVertex3f(-1.5f, 1.0f, -6.0f);
+//            gl.glVertex3f(1.5f, 1.0f, -6.0f);
+//            gl.glVertex3f(1.5f, -1.0f, -6.0f);
+//            gl.glVertex3f(-1.5f, -1.0f, -6.0f);
+//        gl.glEnd();
+//        
+//        gl.glTranslatef(0.0f, 2.0f, 0.0f);
+//        gl.glBegin(GL.GL_TRIANGLES);
+//            gl.glColor3f(1.0f,0.0f,0.0f);
+//            gl.glVertex3f(0.0f, 0.0f, -6.0f);
+//            gl.glVertex3f(-2.0f,-1.0f, -6.0f);
+//            gl.glVertex3f(2.0f,-1.0f, -6.0f);
+//        gl.glEnd();
+//
+//        gl.glTranslatef(-0.8f, -1.6f, 0.0f);
+//        gl.glBegin(GL.GL_QUADS);
+//            gl.glColor3f(0.0f,1.0f,1.0f);
+//            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, -0.3f, -6.0f);
+//            gl.glVertex3f(-0.3f, -0.3f, -6.0f);
+//        gl.glEnd();
+//        
+//        gl.glTranslatef(1.6f, 0.0f, 0.0f);
+//        gl.glBegin(GL.GL_QUADS);
+//            gl.glColor3f(0.0f,1.0f,1.0f);
+//            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, -0.3f, -6.0f);
+//            gl.glVertex3f(-0.3f, -0.3f, -6.0f);
+//        gl.glEnd();
+//        
+//        gl.glTranslatef(-0.8f, -0.4f, 0.0f);
+//        gl.glBegin(GL.GL_QUADS);
+//            gl.glColor3f(0.0f,0.0f,1.0f);
+//            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, 0.3f, -6.0f);
+//            gl.glVertex3f(0.3f, -1.0f, -6.0f);
+//            gl.glVertex3f(-0.3f, -1.0f, -6.0f);
+//        gl.glEnd();
+        //=================================
         
-        gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(1.0f,1.0f,0.0f);
-            gl.glVertex3f(-1.5f, 1.0f, -6.0f);
-            gl.glVertex3f(1.5f, 1.0f, -6.0f);
-            gl.glVertex3f(1.5f, -1.0f, -6.0f);
-            gl.glVertex3f(-1.5f, -1.0f, -6.0f);
-        gl.glEnd();
-        
-        gl.glTranslatef(0.0f, 2.0f, 0.0f);
-        gl.glBegin(GL.GL_TRIANGLES);
-            gl.glColor3f(1.0f,0.0f,0.0f);
-            gl.glVertex3f(0.0f, 0.0f, -6.0f);
-            gl.glVertex3f(-2.0f,-1.0f, -6.0f);
-            gl.glVertex3f(2.0f,-1.0f, -6.0f);
-        gl.glEnd();
-
-        gl.glTranslatef(-0.8f, -1.6f, 0.0f);
-        gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(0.0f,1.0f,1.0f);
-            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, -0.3f, -6.0f);
-            gl.glVertex3f(-0.3f, -0.3f, -6.0f);
-        gl.glEnd();
-        
-        gl.glTranslatef(1.6f, 0.0f, 0.0f);
-        gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(0.0f,1.0f,1.0f);
-            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, -0.3f, -6.0f);
-            gl.glVertex3f(-0.3f, -0.3f, -6.0f);
-        gl.glEnd();
-        
-        gl.glTranslatef(-0.8f, -0.4f, 0.0f);
-        gl.glBegin(GL.GL_QUADS);
-            gl.glColor3f(0.0f,0.0f,1.0f);
-            gl.glVertex3f(-0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, 0.3f, -6.0f);
-            gl.glVertex3f(0.3f, -1.0f, -6.0f);
-            gl.glVertex3f(-0.3f, -1.0f, -6.0f);
+        float x,y,kat;
+        gl.glBegin(GL.GL_TRIANGLE_FAN);
+            gl.glVertex3f(0.0f,0.0f,-6.0f); //œrodek
+            for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+                x = 0.5f*(float)Math.sin(kat);
+                y = 0.5f*(float)Math.cos(kat);
+                gl.glVertex3f(x, y, -6.0f); //kolejne punkty
+            }
         gl.glEnd();
         
         // Flush all drawing operations to the graphics card
