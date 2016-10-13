@@ -219,22 +219,49 @@ public class SimpleJOGL implements GLEventListener {
 //        gl.glEnd();
         
         // ---------------------------- 3D walec
-        //gorna
+        
+//        //gorna
+//        float x, y, z, kat;
+//        gl.glBegin(GL.GL_TRIANGLE_FAN);
+//        gl.glColor3f(1.0f,1.0f,0.0f);
+//        gl.glVertex3f(0.0f, 2.0f, 0.0f);
+//        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+//                x = 1.5f * (float)Math.sin(kat);
+//                y = 0.0f * (float)Math.cos(kat) + 2.0f;
+//                z = 1.5f * (float)Math.cos(kat);
+//                gl.glVertex3f(x, y, z); //kolejne punkty
+//        }
+//        gl.glEnd();
+//        
+//        //dolna
+//        gl.glBegin(GL.GL_TRIANGLE_FAN);
+//        gl.glColor3f(0.0f, 1.0f,0.0f);
+//        gl.glVertex3f(0.0f, -2.0f, 0.0f);
+//        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+//                x = 1.5f * (float)Math.sin(kat);
+//                y = 0.0f * (float)Math.cos(kat) - 2.0f;
+//                z = 1.5f * (float)Math.cos(kat);
+//                gl.glVertex3f(x, y, z); //kolejne punkty
+//        }
+//        gl.glEnd();
+//        
+//        //sciana
+//        gl.glBegin(GL.GL_QUAD_STRIP);
+//        gl.glColor3f(0.0f, 0.0f, 1.0f);
+//        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+//            x = 1.5f * (float)Math.sin(kat);
+//            z = 1.5f * (float)Math.cos(kat);
+//            gl.glVertex3f(x, -2.0f, z); //kolejne punkty
+//            gl.glVertex3f(x, 2.0f, z);
+//        }
+//        gl.glEnd();
+        
+        // ---------------------------- 3D sto¿ek
+        
+        //podstawy kola
         float x, y, z, kat;
         gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glColor3f(1.0f,1.0f,0.0f);
-        gl.glVertex3f(0.0f, 2.0f, 0.0f);
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
-                x = 1.5f * (float)Math.sin(kat);
-                y = 0.0f * (float)Math.cos(kat) + 2.0f;
-                z = 1.5f * (float)Math.cos(kat);
-                gl.glVertex3f(x, y, z); //kolejne punkty
-        }
-        gl.glEnd();
-        
-        //dolna
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glColor3f(0.0f, 1.0f,0.0f);
+        gl.glColor3f(0.0f, 0.0f, 1.0f);
         gl.glVertex3f(0.0f, -2.0f, 0.0f);
         for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
                 x = 1.5f * (float)Math.sin(kat);
@@ -244,14 +271,13 @@ public class SimpleJOGL implements GLEventListener {
         }
         gl.glEnd();
         
-        //sciana
         gl.glBegin(GL.GL_QUAD_STRIP);
-        gl.glColor3f(0.0f, 0.0f, 1.0f);
+        gl.glColor3f(1.0f, 1.0f, 0.0f);
         for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
             x = 1.5f * (float)Math.sin(kat);
             z = 1.5f * (float)Math.cos(kat);
             gl.glVertex3f(x, -2.0f, z); //kolejne punkty
-            gl.glVertex3f(x, 2.0f, z);
+            gl.glVertex3f(0.0f, 1.0f, 0.0f);
         }
         gl.glEnd();
         
