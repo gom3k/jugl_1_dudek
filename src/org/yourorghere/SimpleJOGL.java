@@ -164,36 +164,45 @@ public class SimpleJOGL implements GLEventListener {
 
         gl.glBegin(GL.GL_QUADS);
         //?ciana przednia (czerwony)
-        gl.glNormal3f(0.0f,0.0f,1.0f);
+//        float[] scianka1 = {-2.0f, -2.0f, 2.0f, //wpó³rzêdne pierwszego punktu
+//        1.0f, -1.0f, 1.0f, //wspó³rzêdne drugiego punktu
+//        0.0f, 1.0f, 0.0f}; //wspó³rzêdne trzeciego punktu
+//        float[] normalna1 = WyznaczNormalna(scianka1,0,3,6);
+        gl.glNormal3f(1.0f,0.0f,0.0f);
         gl.glVertex3f(-1.0f,-1.0f,1.0f);
         gl.glVertex3f(1.0f,-1.0f,1.0f);
         gl.glVertex3f(1.0f,1.0f,1.0f);
         gl.glVertex3f(-1.0f,1.0f,1.0f);
         //sciana tylnia (zielony)
+        gl.glNormal3f(1.0f,0.0f,0.0f);
         gl.glColor3f(1.0f,1.0f,0.0f);
         gl.glVertex3f(-1.0f,1.0f,-1.0f);
         gl.glVertex3f(1.0f,1.0f,-1.0f);
         gl.glVertex3f(1.0f,-1.0f,-1.0f);
         gl.glVertex3f(-1.0f,-1.0f,-1.0f);
         //?ciana lewa (niebieski)
+        gl.glNormal3f(1.0f,0.0f,0.0f);
         gl.glColor3f(1.0f,1.0f,0.0f);
         gl.glVertex3f(-1.0f,-1.0f,-1.0f);
         gl.glVertex3f(-1.0f,-1.0f,1.0f);
         gl.glVertex3f(-1.0f,1.0f,1.0f);
         gl.glVertex3f(-1.0f,1.0f,-1.0f);
         //?ciana prawa (zolty)
+        gl.glNormal3f(1.0f,0.0f,0.0f);
         gl.glColor3f(1.0f,1.0f,0.0f);
         gl.glVertex3f(1.0f,1.0f,-1.0f);
         gl.glVertex3f(1.0f,1.0f,1.0f);
         gl.glVertex3f(1.0f,-1.0f,1.0f);
         gl.glVertex3f(1.0f,-1.0f,-1.0f);
         //?ciana dolna (fioletowy)
+        gl.glNormal3f(0.0f,0.0f,1.0f);
         gl.glColor3f(1.0f,1.0f,0.0f);
         gl.glVertex3f(-1.0f,-1.0f,1.0f);
         gl.glVertex3f(-1.0f,-1.0f,-1.0f);
         gl.glVertex3f(1.0f,-1.0f,-1.0f);
         gl.glVertex3f(1.0f,-1.0f,1.0f);
         //?ciana górna (jasno-niebieski)
+        gl.glNormal3f(0.0f,1.0f,0.0f);
         gl.glColor3f(1.0f,1.0f,0.0f);
         gl.glVertex3f(-1.0f,1.0f,-1.0f);
         gl.glVertex3f(-1.0f,1.0f,1.0f);
