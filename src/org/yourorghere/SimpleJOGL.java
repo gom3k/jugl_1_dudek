@@ -8,6 +8,8 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import static javax.swing.Spring.height;
+import static javax.swing.Spring.width;
 
 
 
@@ -137,11 +139,22 @@ public class SimpleJOGL implements GLEventListener {
         
             height = 1;
         }
+        
+   
+        
         final float h = (float) width / (float) height;
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(100.0f, h, 1.0, 20.0);
+      //  glu.gluPerspective(100.0f, h, 1.0, 20.0);
+        float ilor;
+        if(width<=height){
+            ilor = height/width;
+            gl.glOrtho(-10.0f,10.0f,-10.0f*ilor,10.0f*ilor,-10.0f,10.0f);
+        }else{
+            ilor = width/height;
+            gl.glOrtho(-10.0f*ilor,10.0f*ilor,-10.0f,10.0f,-10.0f,10.0f);
+        }
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
     }
@@ -213,6 +226,23 @@ public class SimpleJOGL implements GLEventListener {
         gl.glFlush();
     }
     
+    void drzewo(GL gl){
+        gl.glPushMatrix();
+        walec(gl);
+        
+        gl.glTranslatef(0.0f, 0.0f, -1.0f);
+        stozek(gl);
+        gl.glTranslatef(0.0f, 0.0f, -1.4f);
+        gl.glScalef(0.5f, 0.5f, 0.5f);
+        
+        stozek(gl);
+        gl.glTranslatef(0.0f, 0.0f, -1.6f);
+        gl.glScalef(0.5f, 0.5f, 0.5f);
+        
+        stozek(gl);
+        gl.glPopMatrix();
+    }
+    
     void walec(GL gl){
         //wywo³ujemy automatyczne normalizowanie normalnych
         //bo operacja skalowania je zniekszta³ci
@@ -278,21 +308,9 @@ public class SimpleJOGL implements GLEventListener {
         gl.glEnd();
     }
     
-    void drzewo(GL gl){
-        gl.glPushMatrix();
-        walec(gl);
-        
-        gl.glTranslatef(0.0f, 0.0f, -1.0f);
-        stozek(gl);
-        gl.glTranslatef(0.0f, 0.0f, -1.4f);
-        gl.glScalef(0.5f, 0.5f, 0.5f);
-        
-        stozek(gl);
-        gl.glTranslatef(0.0f, 0.0f, -1.6f);
-        gl.glScalef(0.5f, 0.5f, 0.5f);
-        
-        stozek(gl);
-        gl.glPopMatrix();
+    void glOrtho(double left, double right, double bottom, double top,
+    double zNear, double zFar){
+     
     }
     
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
