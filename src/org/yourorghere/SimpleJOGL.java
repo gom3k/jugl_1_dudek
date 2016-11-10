@@ -214,6 +214,18 @@ public class SimpleJOGL implements GLEventListener {
         
         koparka.Rysuj(gl);
         
+        i++;
+        if(i<500)
+            koparka.ZmienKat1(0.01f);
+        if(500<i&&i<2000)
+            koparka.ZmienKat1(-0.05f);
+        if(3000<i&&i<3500)
+            koparka.ZmienKat3(-0.05f);
+        if(3500<i&&i<4300)
+            koparka.ZmienKat4(0.05f);
+        if(4300<i&&i<6000)
+            koparka.ZmienKat1(0.05f);
+        
         // Flush all drawing operations to the graphics card
         gl.glFlush();
     }
