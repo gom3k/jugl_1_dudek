@@ -8,9 +8,6 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-import static javax.swing.Spring.height;
-import static javax.swing.Spring.width;
-
 
 
 /**
@@ -25,6 +22,7 @@ public class SimpleJOGL implements GLEventListener {
     private static float diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };//?wiat³o rozproszone
     private static float specular[] = { 1.0f, 1.0f, 1.0f, 1.0f}; //?wiat³o odbite
     private static float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja ?wiat³a
+    static Koparka koparka;
     
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
@@ -81,6 +79,12 @@ public class SimpleJOGL implements GLEventListener {
                     lightPos[3] = 0;
                 if(e.getKeyChar() == 'm')
                     lightPos[3] = 1;
+                
+//                if(e.getKeyCode() == KeyEvent.VK_1)
+//                    koparka.ZmienKat1(1.0f);
+//                if(e.getKeyCode() == KeyEvent.VK_1)
+//                    koparka.kat1+=0.1f
+
             }
             public void keyReleased(KeyEvent e){}
             public void keyTyped(KeyEvent e){}
@@ -94,13 +98,13 @@ public class SimpleJOGL implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         // Use debug pipeline
         // drawable.setGL(new DebugGL(drawable.getGL()));
+        koparka = new Koparka();
 
         GL gl = drawable.getGL();
         System.err.println("INIT GL IS: " + gl.getClass().getName());
 
         // Enable VSync
         gl.setSwapInterval(1);
-        
         
         //warto?ci sk³adowe o?wietlenia i koordynaty ?ród³a ?wiat³a
         float ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };//swiat³o otaczajšce
@@ -134,13 +138,10 @@ public class SimpleJOGL implements GLEventListener {
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL gl = drawable.getGL();
         GLU glu = new GLU();
-
-        if (height <= 0) { // avoid a divide by zero error!
         
+        if (height <= 0) { // avoid a divide by zero error!
             height = 1;
         }
-        
-   
         
         final float h = (float) width / (float) height;
         gl.glViewport(0, 0, width, height);
@@ -201,116 +202,150 @@ public class SimpleJOGL implements GLEventListener {
         gl.glRotatef(xrot, 1.0f, 0.0f, 0.0f); //rotacja wokó³ osi X
         gl.glRotatef(yrot, 0.0f, 1.0f, 0.0f); //rotacja wokó³ osi Y
         
-        
-//        walec(gl);
-//        gl.glTranslatef(0.0f, 0.0f, -1.0f);
-//        stozek(gl);
-//        gl.glTranslatef(0.0f, 0.0f, -1.4f);
-//        gl.glScalef(0.5f, 0.5f, 0.5f);
-//        stozek(gl);
-//        gl.glTranslatef(0.0f, 0.0f, -1.6f);
-//        gl.glScalef(0.5f, 0.5f, 0.5f);
-//        stozek(gl);
-        
-        for(int i = 1; i <= 3; i++){
-            gl.glPushMatrix();
-            for(int j = 1; j <= 10; j++){
-                gl.glTranslatef(0.0f, 2.0f, 0.0f);
-                drzewo(gl);
-            }
-            gl.glPopMatrix();
-            gl.glTranslatef(-2.0f, 0.0f, 0.0f);
-        }
+        koparka.Rysuj(gl);
         
         // Flush all drawing operations to the graphics card
         gl.glFlush();
     }
     
-    void drzewo(GL gl){
-        gl.glPushMatrix();
-        walec(gl);
-        
-        gl.glTranslatef(0.0f, 0.0f, -1.0f);
-        stozek(gl);
-        gl.glTranslatef(0.0f, 0.0f, -1.4f);
-        gl.glScalef(0.5f, 0.5f, 0.5f);
-        
-        stozek(gl);
-        gl.glTranslatef(0.0f, 0.0f, -1.6f);
-        gl.glScalef(0.5f, 0.5f, 0.5f);
-        
-        stozek(gl);
-        gl.glPopMatrix();
+    public class Koparka {
+        public void Rysuj(GL gl){
+        //ciagnik
+            gl.glColor3f(1.0f,1.0f,0.0f);
+            Prostopadloscian(gl,-2.0f,-1.0f,-1.0f,4.0f,1.0f,2.0f);
+            gl.glColor3f(0.15f,0.15f,0.15f);
+            Walec(gl,0.5f,0.5f,-1.5f,-1.0f,-1.25f);
+            Walec(gl,0.5f,0.5f,-1.5f,-1.0f,0.75f);
+            Walec(gl,0.5f,0.5f,1.5f,-1.0f,-1.25f);
+            Walec(gl,0.5f,0.5f,1.5f,-1.0f,0.75f);
+            gl.glColor3f(1.0f,1.0f,0.0f);
+            Prostopadloscian(gl,-0.5f,0.0f,-1.0f,2.0f,0.5f,2.0f);
+            Prostopadloscian(gl,-0.5f,0.5f,-1.0f,0.1f,1.0f,0.1f);
+            Prostopadloscian(gl,-0.5f,0.5f,0.9f,0.1f,1.0f,0.1f);
+            Prostopadloscian(gl,1.4f,0.5f,-1.0f,0.1f,1.0f,0.1f);
+            Prostopadloscian(gl,1.4f,0.5f,0.9f,0.1f,1.0f,0.1f);
+            Prostopadloscian(gl,-0.5f,1.5f,-1.0f,2.0f,0.1f,2.0f);
+            //ramie 1
+            gl.glTranslatef(1.5f,0.0f,0.0f);
+            gl.glRotatef(45.0f,0.0f,0.0f,1.0f);
+            Prostopadloscian(gl,0.0f,0.0f,0.0f,3.0f,0.3f,0.3f);
+            //ramie 2
+            gl.glTranslatef(2.7f,0.0f,0.0f);
+            gl.glRotatef(-45.0f,0.0f,0.0f,1.0f);
+            Prostopadloscian(gl,0.0f,0.0f,0.0f,1.5f,0.3f,0.3f);
+            //lyzka
+            gl.glTranslatef(1.2f,0.1f,0.0f);
+            gl.glRotatef(-45.0f,0.0f,0.0f,1.0f);
+            Lyzka(gl);
+        } 
+        private void Prostopadloscian(GL gl, float x0, float y0, float z0, float dx, float dy, float dz){
+            float x1=x0+dx;
+            float y1=y0+dy;
+            float z1=z0+dz;
+            gl.glBegin(GL.GL_QUADS);
+            //sciana przednia
+            gl.glNormal3f(0.0f,0.0f,1.0f);
+            gl.glVertex3f(x0,y0,z1);
+            gl.glVertex3f(x1,y0,z1);
+            gl.glVertex3f(x1,y1,z1);
+            gl.glVertex3f(x0,y1,z1);
+            //sciana tylnia
+            gl.glNormal3f(0.0f,0.0f,-1.0f);
+            gl.glVertex3f(x0,y1,z0);
+            gl.glVertex3f(x1,y1,z0);
+            gl.glVertex3f(x1,y0,z0);
+            gl.glVertex3f(x0,y0,z0);
+            //sciana lewa
+            gl.glNormal3f(-1.0f,0.0f,0.0f);
+            gl.glVertex3f(x0,y0,z0);
+            gl.glVertex3f(x0,y0,z1);
+            gl.glVertex3f(x0,y1,z1);
+            gl.glVertex3f(x0,y1,z0);
+            //sciana prawa
+            gl.glNormal3f(1.0f,0.0f,0.0f);
+            gl.glVertex3f(x1,y1,z0);
+            gl.glVertex3f(x1,y1,z1);
+            gl.glVertex3f(x1,y0,z1);
+            gl.glVertex3f(x1,y0,z0);
+            //sciana dolna
+            gl.glNormal3f(0.0f,-1.0f,0.0f);
+            gl.glVertex3f(x0,y0,z1);
+            gl.glVertex3f(x0,y0,z0);
+            gl.glVertex3f(x1,y0,z0);
+            gl.glVertex3f(x1,y0,z1);
+            //sciana gorna
+            gl.glNormal3f(0.0f,1.0f,0.0f);
+            gl.glVertex3f(x1,y1,z1);
+            gl.glVertex3f(x1,y1,z0);
+            gl.glVertex3f(x0,y1,z0);
+            gl.glVertex3f(x0,y1,z1);
+            gl.glEnd();
+        }
+        private void Walec(GL gl, float promien, float dlugosc, float px, float py, float pz){
+            float x=0.0f,y=0.0f,kat=0.0f;
+            gl.glBegin(GL.GL_QUAD_STRIP);
+            for(kat = 0.0f; kat < (2.0f*Math.PI); kat += (Math.PI/32.0f)){
+                x = px + promien*(float)Math.sin(kat);
+                y = py + promien*(float)Math.cos(kat);
+                gl.glNormal3f((float)Math.sin(kat),(float)Math.cos(kat),0.0f);
+                gl.glVertex3f(x, y, pz);
+                gl.glVertex3f(x, y, pz+dlugosc);
+            }
+            gl.glEnd();
+            gl.glNormal3f(0.0f,0.0f,-1.0f);
+            x=y=kat=0.0f;
+            gl.glBegin(GL.GL_TRIANGLE_FAN);
+            gl.glVertex3f(px, py, pz); //srodek kola
+            for(kat = 0.0f; kat < (2.0f*Math.PI); kat += (Math.PI/32.0f)){
+                x = px + promien*(float)Math.sin(kat);
+                y = py + promien*(float)Math.cos(kat);
+                gl.glVertex3f(x, y, pz);
+            }
+            gl.glEnd();
+            gl.glNormal3f(0.0f,0.0f,1.0f);
+            x=y=kat=0.0f;
+            gl.glBegin(GL.GL_TRIANGLE_FAN);
+            gl.glVertex3f(px, py, pz+dlugosc); //srodek kola
+            for(kat = 2.0f*(float)Math.PI; kat > 0.0f ; kat -= (Math.PI/32.0f)){
+                x = px + promien*(float)Math.sin(kat);
+                y = py + promien*(float)Math.cos(kat);
+                gl.glVertex3f(x, y, pz+dlugosc);
+            }
+            gl.glEnd();
+        }
+        private void Lyzka(GL gl){
+            gl.glDisable(GL.GL_CULL_FACE);
+            gl.glBegin(GL.GL_TRIANGLES);
+            //prawa
+            gl.glNormal3f(0.0f,0.0f,1.0f);
+            gl.glVertex3f(0.0f,0.0f,0.5f);
+            gl.glVertex3f(0.5f,0.5f,0.5f);
+            gl.glVertex3f(0.0f,0.5f,0.5f);
+            //lewa
+            gl.glNormal3f(0.0f,0.0f,-1.0f);
+            gl.glVertex3f(0.0f,0.0f,-0.2f);
+            gl.glVertex3f(0.0f,0.5f,-0.2f);
+            gl.glVertex3f(0.5f,0.5f,-0.2f);
+            gl.glEnd();
+            gl.glDisable(GL.GL_CULL_FACE);
+            gl.glBegin(GL.GL_QUADS);
+            gl.glNormal3f(-1.0f,0.0f,0.0f);
+            gl.glVertex3f(0.0f,0.0f,0.5f);
+            gl.glVertex3f(0.0f,0.5f,0.5f);
+            gl.glVertex3f(0.0f,0.5f,-0.2f);
+            gl.glVertex3f(0.0f,0.0f,-0.2f);
+            gl.glNormal3f(0.0f,1.0f,0.0f);
+            gl.glVertex3f(0.0f,0.5f,0.5f);
+            gl.glVertex3f(0.5f,0.5f,0.5f);
+            gl.glVertex3f(0.5f,0.5f,-0.2f);
+            gl.glVertex3f(0.0f,0.5f,-0.2f);
+            gl.glEnd();
+            gl.glEnable(GL.GL_CULL_FACE);
+        }
     }
     
-    void walec(GL gl){
-        //wywo³ujemy automatyczne normalizowanie normalnych
-        //bo operacja skalowania je zniekszta³ci
-        gl.glEnable(GL.GL_NORMALIZE);
-        gl.glColor3f(150.0f/255,75.0f/255,0.0f/255);
-        float x,y,kat;
-        gl.glBegin(GL.GL_QUAD_STRIP);
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat += (Math.PI/32.0f)){
-        x = 0.5f*(float)Math.sin(kat);
-        y = 0.5f*(float)Math.cos(kat);
-        gl.glNormal3f((float)Math.sin(kat),(float)Math.cos(kat),0.0f);
-        gl.glVertex3f(x, y, -1.0f);
-        gl.glVertex3f(x, y, 0.0f);
-        }
-        gl.glEnd();
+    void glOrtho(double left, double right, double bottom, double top, double zNear, double zFar){
         
-        gl.glNormal3f(0.0f,0.0f,-1.0f);
-        x=y=kat=0.0f;
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glVertex3f(0.0f, 0.0f, -1.0f); //srodek kola
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat += (Math.PI/32.0f)){
-        x = 0.5f*(float)Math.sin(kat);
-        y = 0.5f*(float)Math.cos(kat);
-        gl.glVertex3f(x, y, -1.0f);
-        }
-        gl.glEnd();
-        
-        gl.glNormal3f(0.0f,0.0f,1.0f);
-        x=y=kat=0.0f;
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glVertex3f(0.0f, 0.0f, 0.0f); //srodek kola
-        for(kat = 2.0f*(float)Math.PI; kat > 0.0f ; kat -= (Math.PI/32.0f)){
-        x = 0.5f*(float)Math.sin(kat);
-        y = 0.5f*(float)Math.cos(kat);
-        gl.glVertex3f(x, y, 0.0f);
-        }
-        gl.glEnd();
-    }
-        
-    void stozek(GL gl){
-        //wywo³ujemy automatyczne normalizowanie normalnych
-        gl.glEnable(GL.GL_NORMALIZE);
-        gl.glColor3f(0.0f/255,102.0f/255,51.0f/255);
-        float x,y,kat;
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glVertex3f(0.0f, 0.0f, -2.0f); //wierzcholek stozka
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat += (Math.PI/32.0f)){
-            x = (float)Math.sin(kat);
-            y = (float)Math.cos(kat);
-            gl.glNormal3f((float)Math.sin(kat),(float)Math.cos(kat), -2.0f);
-            gl.glVertex3f(x, y, 0.0f);
-        }
-        gl.glEnd();
-        
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        gl.glNormal3f(0.0f,0.0f,1.0f);
-        gl.glVertex3f(0.0f, 0.0f, 0.0f); //srodek kola
-        for(kat = 2.0f*(float)Math.PI; kat > 0.0f; kat -= (Math.PI/32.0f)){
-            x = (float)Math.sin(kat);
-            y = (float)Math.cos(kat);
-            gl.glVertex3f(x, y, 0.0f);
-        }
-        gl.glEnd();
-    }
-    
-    void glOrtho(double left, double right, double bottom, double top,
-    double zNear, double zFar){
-     
     }
     
     public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
