@@ -8,6 +8,12 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import com.sun.opengl.util.texture.Texture;
+import com.sun.opengl.util.texture.TextureIO;
+import java.io.File;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -22,12 +28,15 @@ public class SimpleJOGL implements GLEventListener {
     private static float diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };//?wiat³o rozproszone
     private static float specular[] = { 1.0f, 1.0f, 1.0f, 1.0f}; //?wiat³o odbite
     private static float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja ?wiat³a
-    static Koparka koparka;
-    int i=0;
+    static BufferedImage image1 = null, image2 = null, image3 = null, image4 = null;
+    static Texture t1 = null, t2 = null, t3 = null, t4 = null;
     
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
+        
+
+
 
         canvas.addGLEventListener(new SimpleJOGL());
         frame.add(canvas);
@@ -81,22 +90,6 @@ public class SimpleJOGL implements GLEventListener {
                 if(e.getKeyChar() == 'm')
                     lightPos[3] = 1;
                 
-                if(e.getKeyCode() == KeyEvent.VK_1 && koparka.kat1 <= 30.0f)
-                    koparka.ZmienKat1(1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_2 && koparka.kat1 >= -45.0f)
-                    koparka.ZmienKat1(-1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_3 && koparka.kat2 <= 80.0f)
-                    koparka.ZmienKat2(1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_4 && koparka.kat2 >= -65.0f)
-                    koparka.ZmienKat2(-1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_5 && koparka.kat3 <= 60.0f)
-                    koparka.ZmienKat3(1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_6 && koparka.kat3 >= -50.0f)
-                    koparka.ZmienKat3(-1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_7)
-                    koparka.ZmienKat4(1.0f);
-                if(e.getKeyCode() == KeyEvent.VK_8)
-                    koparka.ZmienKat4(-1.0f);
             }
             public void keyReleased(KeyEvent e){}
             public void keyTyped(KeyEvent e){}
@@ -108,44 +101,55 @@ public class SimpleJOGL implements GLEventListener {
     }
 
     public void init(GLAutoDrawable drawable) {
-        // Use debug pipeline
-        // drawable.setGL(new DebugGL(drawable.getGL()));
-
         GL gl = drawable.getGL();
         System.err.println("INIT GL IS: " + gl.getClass().getName());
-        koparka = new Koparka();            //obiekt klasy Koparka
-
-        // Enable VSync
         gl.setSwapInterval(1);
-        
-        //warto?ci sk³adowe o?wietlenia i koordynaty ?ród³a ?wiat³a
-        float ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };//swiat³o otaczajšce
-        float diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };//?wiat³o rozproszone
-        float specular[] = { 1.0f, 1.0f, 1.0f, 1.0f}; //?wiat³o odbite
-        float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja ?wiat³a
-        //(czwarty parametr okre?la odleg³o?æ ?ród³a:
-        //0.0f-nieskoñczona; 1.0f-okre?lona przez pozosta³e parametry)
-        gl.glEnable(GL.GL_LIGHTING); //uaktywnienie o?wietlenia
-        //ustawienie parametrów ?ród³a ?wiat³a nr. 0
-        gl.glLightfv(GL.GL_LIGHT0,GL.GL_AMBIENT,ambientLight,0); //swiat³o otaczajšce
-        gl.glLightfv(GL.GL_LIGHT0,GL.GL_DIFFUSE,diffuseLight,0); //?wiat³o rozproszone
-        gl.glLightfv(GL.GL_LIGHT0,GL.GL_SPECULAR,specular,0); //?wiat³o odbite
-        gl.glLightfv(GL.GL_LIGHT0,GL.GL_POSITION,lightPos,0); //pozycja ?wiat³a
-        gl.glEnable(GL.GL_LIGHT0); //uaktywnienie ?ród³a ?wiat³a nr. 0
-        gl.glEnable(GL.GL_COLOR_MATERIAL); //uaktywnienie ?ledzenia kolorów
-        //kolory bêdš ustalane za pomocš glColor
-        gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
-        //Ustawienie jasno?ci i odblaskowo?ci obiektów
-        float specref[] = { 1.0f, 1.0f, 1.0f, 1.0f }; //parametry odblaskowo?ci
-        gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR,specref,0);
-        
-        gl.glMateriali(GL.GL_FRONT,GL.GL_SHININESS,128);
 
+        //wartoœci sk³adowe oœwietlenia i koordynaty Ÿród³a œwiat³a
+        float ambientLight[] = { 0.3f, 0.3f, 0.3f, 1.0f };//swiat³o otaczaj¹ce
+        float diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };//œwiat³o rozproszone
+        float specular[] = { 1.0f, 1.0f, 1.0f, 1.0f}; //œwiat³o odbite
+        float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja œwiat³a
+        //(czwarty parametr okreœla odleg³oœæ Ÿród³a:
+        //0.0f-nieskoñczona; 1.0f-okreœlona przez pozosta³e parametry)
+        gl.glEnable(GL.GL_LIGHTING); //uaktywnienie oœwietlenia
+        //ustawienie parametrów Ÿród³a œwiat³a nr. 0
+        gl.glLightfv(GL.GL_LIGHT0,GL.GL_AMBIENT,ambientLight,0); //swiat³o otaczaj¹ce
+        gl.glLightfv(GL.GL_LIGHT0,GL.GL_DIFFUSE,diffuseLight,0); //œwiat³o rozproszone
+        gl.glLightfv(GL.GL_LIGHT0,GL.GL_SPECULAR,specular,0); //œwiat³o odbite
+        gl.glLightfv(GL.GL_LIGHT0,GL.GL_POSITION,lightPos,0); //pozycja œwiat³a
+        gl.glEnable(GL.GL_LIGHT0); //uaktywnienie Ÿród³a œwiat³a nr. 0
+        gl.glEnable(GL.GL_COLOR_MATERIAL); //uaktywnienie œledzenia kolorów
+        //kolory bêd¹ ustalane za pomoc¹ glColor
+        gl.glColorMaterial(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE);
         gl.glEnable(GL.GL_DEPTH_TEST);
         // Setup the drawing area and shading mode
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        gl.glShadeModel(GL.GL_SMOOTH); // try setting this to GL_FLAT and see what happens.
-    }
+        gl.glShadeModel(GL.GL_SMOOTH);
+        
+        try{
+            image1 = ImageIO.read(getClass().getResourceAsStream("/pokemon.jpg"));
+            image2 = ImageIO.read(getClass().getResourceAsStream("/android.jpg"));
+            image3 = ImageIO.read(getClass().getResourceAsStream("/skora1.jpg"));
+            image4 = ImageIO.read(getClass().getResourceAsStream("/skora2.jpg"));
+        }
+        catch(Exception exc){
+            JOptionPane.showMessageDialog(null, exc.toString());
+            return;
+        }
+
+        t1 = TextureIO.newTexture(image1, false);
+        t2 = TextureIO.newTexture(image2, false);
+        t3 = TextureIO.newTexture(image3, false);
+        t4 = TextureIO.newTexture(image4, false);
+
+        gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_BLEND | GL.GL_MODULATE);
+        gl.glEnable(GL.GL_TEXTURE_2D);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+   }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL gl = drawable.getGL();
@@ -212,19 +216,60 @@ public class SimpleJOGL implements GLEventListener {
         gl.glRotatef(xrot, 1.0f, 0.0f, 0.0f); //rotacja wokó³ osi X
         gl.glRotatef(yrot, 0.0f, 1.0f, 0.0f); //rotacja wokó³ osi Y
         
-        koparka.Rysuj(gl);
-        
-        i++;
-        if(i<500)
-            koparka.ZmienKat1(0.01f);
-        if(500<i&&i<2000)
-            koparka.ZmienKat1(-0.05f);
-        if(3000<i&&i<3500)
-            koparka.ZmienKat3(-0.05f);
-        if(3500<i&&i<4300)
-            koparka.ZmienKat4(0.05f);
-        if(4300<i&&i<6000)
-            koparka.ZmienKat1(0.05f);
+        //?ciana przednia (czerwony)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
+        gl.glEnd();
+        //sciana tylnia (zielony)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t2.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
+        gl.glEnd();
+        //?ciana lewa (niebieski)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t3.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
+        gl.glEnd();
+        //?ciana prawa (zolty)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t4.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
+        gl.glEnd();
+        //?ciana dolna (fioletowy)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
+        gl.glEnd();
+        //?ciana górna (jasno-niebieski)
+        gl.glBindTexture(GL.GL_TEXTURE_2D, t2.getTextureObject());
+        gl.glBegin(GL.GL_QUADS);
+        gl.glNormal3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
+        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);     
+        gl.glEnd();
         
         // Flush all drawing operations to the graphics card
         gl.glFlush();
