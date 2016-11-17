@@ -272,43 +272,42 @@ public class SimpleJOGL implements GLEventListener {
 //        gl.glEnd();
         
         
-        // 3D ostros?up o podstawie kwadratu
+        // ---------------------------- 3D walec
+        //gorna
+        float x, y, z, kat;
+        gl.glBegin(GL.GL_TRIANGLE_FAN);
+        //gl.glColor3f(0.0f, 0.0f, 1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(0.0f, 2.0f, 0.0f);
+        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+                x = 1.5f * (float)Math.sin(kat);
+                y = 0.0f * (float)Math.cos(kat) + 2.0f;
+                z = 1.5f * (float)Math.cos(kat);
+                gl.glVertex3f(x, y, z); //kolejne punkty
+        }
+        gl.glEnd();
         
-        //?ciana dolna (czerwony)
+        //dolna
+        gl.glBegin(GL.GL_TRIANGLE_FAN);
+        //gl.glColor3f(0.0f, 0.0f, 1.0f);
+        gl.glVertex3f(0.0f, -2.0f, 0.0f);
+        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+                x = 1.5f * (float)Math.sin(kat);
+                y = 0.0f * (float)Math.cos(kat) - 2.0f;
+                z = 1.5f * (float)Math.cos(kat);
+                gl.glVertex3f(x, y, z); //kolejne punkty
+        }
+        gl.glEnd();
+        
+        //sciana
         gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
-        gl.glBegin(GL.GL_QUADS);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-        gl.glEnd();
-        //?ciana lewa (niebieski)
-        gl.glBindTexture(GL.GL_TEXTURE_2D, t2.getTextureObject());
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(0.0f,0.5f,0.0f);
-        gl.glEnd();
-        //?ciana prawa (zielony)
-        gl.glBindTexture(GL.GL_TEXTURE_2D, t3.getTextureObject());
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(0.0f,0.5f,0.0f);
-        gl.glEnd();
-        //?ciana przednia (zó?ty)
-        gl.glBindTexture(GL.GL_TEXTURE_2D, t4.getTextureObject());
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(0.0f,0.5f,0.0f);
-        gl.glEnd();
-        //?ciana tylna (zó?ty)
-        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
-        gl.glBegin(GL.GL_TRIANGLES);
-        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(0.0f,0.5f,0.0f);
+        gl.glBegin(GL.GL_QUAD_STRIP);
+        //gl.glTexCoord2f(0.0f, 0.0f);
+        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
+            x = 1.5f * (float)Math.sin(kat);
+            z = 1.5f * (float)Math.cos(kat);
+            gl.glTexCoord2f((float) (kat/2/Math.PI), 1.0f); gl.glVertex3f(x, -2.0f, z); //kolejne punkty
+            gl.glTexCoord2f((float) (kat/2/Math.PI), 0.0f); gl.glVertex3f(x, 2.0f, z);
+        }
         gl.glEnd();
         
         // Flush all drawing operations to the graphics card
