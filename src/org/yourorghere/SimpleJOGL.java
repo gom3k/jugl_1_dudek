@@ -30,6 +30,7 @@ public class SimpleJOGL implements GLEventListener {
     private static float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja ?wiat³a
     static BufferedImage image1 = null, image2 = null, image3 = null, image4 = null;
     static Texture t1 = null, t2 = null, t3 = null, t4 = null;
+    static Scena scena;
     
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
@@ -128,9 +129,9 @@ public class SimpleJOGL implements GLEventListener {
         gl.glShadeModel(GL.GL_SMOOTH);
         
         try{
-            image1 = ImageIO.read(getClass().getResourceAsStream("/pokemon.jpg"));
-            image2 = ImageIO.read(getClass().getResourceAsStream("/android.jpg"));
-            image3 = ImageIO.read(getClass().getResourceAsStream("/skora1.jpg"));
+            image1 = ImageIO.read(getClass().getResourceAsStream("/bok.jpg"));
+            image2 = ImageIO.read(getClass().getResourceAsStream("/trawa.jpg"));
+            image3 = ImageIO.read(getClass().getResourceAsStream("/niebo.jpg"));
             image4 = ImageIO.read(getClass().getResourceAsStream("/skora2.jpg"));
         }
         catch(Exception exc){
@@ -149,6 +150,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+        scena = new Scena();
    }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -163,7 +165,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(100.0f, h, 0.1f, 100.0f); //Przy koparce perspektywa
+        glu.gluPerspective(120.0f, h, 0.1f, 300.0f); //Przy koparce perspektywa
 //        float ilor;
 //        if(width<=height){
 //            ilor = height/width;
@@ -216,99 +218,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glRotatef(xrot, 1.0f, 0.0f, 0.0f); //rotacja wokó³ osi X
         gl.glRotatef(yrot, 0.0f, 1.0f, 0.0f); //rotacja wokó³ osi Y
         
-//        //?ciana przednia (czerwony)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
-//        gl.glEnd();
-//        //sciana tylnia (zielony)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t2.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-//        gl.glEnd();
-//        //?ciana lewa (niebieski)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t3.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
-//        gl.glEnd();
-//        //?ciana prawa (zolty)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t4.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-//        gl.glEnd();
-//        //?ciana dolna (fioletowy)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,-1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,-1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,-1.0f,1.0f);
-//        gl.glEnd();
-//        //?ciana górna (jasno-niebieski)
-//        gl.glBindTexture(GL.GL_TEXTURE_2D, t2.getTextureObject());
-//        gl.glBegin(GL.GL_QUADS);
-//        gl.glNormal3f(0.0f, 0.0f, 1.0f);
-//        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,-1.0f);
-//        gl.glTexCoord2f(0.0f, 1.0f); gl.glVertex3f(-1.0f,1.0f,1.0f);
-//        gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,1.0f);
-//        gl.glTexCoord2f(1.0f, 0.0f); gl.glVertex3f(1.0f,1.0f,-1.0f);     
-//        gl.glEnd();
-        
-        
-        // ---------------------------- 3D walec
-        //gorna
-        float x, y, z, kat;
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        //gl.glColor3f(0.0f, 0.0f, 1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f); gl.glVertex3f(0.0f, 2.0f, 0.0f);
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
-                x = 1.5f * (float)Math.sin(kat);
-                y = 0.0f * (float)Math.cos(kat) + 2.0f;
-                z = 1.5f * (float)Math.cos(kat);
-                gl.glVertex3f(x, y, z); //kolejne punkty
-        }
-        gl.glEnd();
-        
-        //dolna
-        gl.glBegin(GL.GL_TRIANGLE_FAN);
-        //gl.glColor3f(0.0f, 0.0f, 1.0f);
-        gl.glVertex3f(0.0f, -2.0f, 0.0f);
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
-                x = 1.5f * (float)Math.sin(kat);
-                y = 0.0f * (float)Math.cos(kat) - 2.0f;
-                z = 1.5f * (float)Math.cos(kat);
-                gl.glVertex3f(x, y, z); //kolejne punkty
-        }
-        gl.glEnd();
-        
-        //sciana
-        gl.glBindTexture(GL.GL_TEXTURE_2D, t1.getTextureObject());
-        gl.glBegin(GL.GL_QUAD_STRIP);
-        //gl.glTexCoord2f(0.0f, 0.0f);
-        for(kat = 0.0f; kat < (2.0f*Math.PI); kat+=(Math.PI/32.0f)){
-            x = 1.5f * (float)Math.sin(kat);
-            z = 1.5f * (float)Math.cos(kat);
-            gl.glTexCoord2f((float) (kat/2/Math.PI), 1.0f); gl.glVertex3f(x, -2.0f, z); //kolejne punkty
-            gl.glTexCoord2f((float) (kat/2/Math.PI), 0.0f); gl.glVertex3f(x, 2.0f, z);
-        }
-        gl.glEnd();
+        scena.Rysuj(gl,t1,t2,t3);
         
         // Flush all drawing operations to the graphics card
         gl.glFlush();
