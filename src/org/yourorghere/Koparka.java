@@ -26,6 +26,9 @@ public class Koparka {
     public void Rysuj(GL gl){
         //ciagnik
         gl.glColor3f(1.0f,1.0f,0.0f);
+        
+        gl.glRotatef(90.0f,0.0f,1.0f,0.0f);
+        
         Prostopadloscian(gl,-2.0f,-1.0f,-1.0f,4.0f,1.0f,2.0f);
         gl.glColor3f(0.15f,0.15f,0.15f);
         Walec(gl,0.5f,0.5f,-1.5f,-1.0f,-1.25f);

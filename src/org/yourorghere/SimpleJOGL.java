@@ -28,15 +28,23 @@ public class SimpleJOGL implements GLEventListener {
     private static float diffuseLight[] = { 0.7f, 0.7f, 0.7f, 1.0f };//?wiat³o rozproszone
     private static float specular[] = { 1.0f, 1.0f, 1.0f, 1.0f}; //?wiat³o odbite
     private static float lightPos[] = { 0.0f, 150.0f, 150.0f, 1.0f };//pozycja ?wiat³a
-    static BufferedImage image1 = null, image2 = null, image3 = null, image4 = null;
-    static Texture t1 = null, t2 = null, t3 = null, t4 = null;
+    static BufferedImage image1 = null, image2 = null, image3 = null;
+    static Texture t1 = null, t2 = null, t3 = null;
+    static Koparka koparka;
     static Scena scena;
-    static float x, z, kat;
+    static float x, z, c, v;
+    int i = 0;
     
     static void przesun(float d){
         x-=d*Math.sin(yrot*(3.14f/180.0f));
         z+=d*Math.cos(yrot*(3.14f/180.0f));
     }
+    
+    static void przesunKoparki(float d){
+        c-=d*Math.sin(yrot*(3.14f/180.0f));
+        v+=d*Math.cos(yrot*(3.14f/180.0f));
+    }
+    
         
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
@@ -97,12 +105,34 @@ public class SimpleJOGL implements GLEventListener {
                 if(e.getKeyChar() == 'm')
                     lightPos[3] = 1;
                 
+                //koparka
+                if(e.getKeyCode() == KeyEvent.VK_1 && koparka.kat1 <= 30.0f)
+                    koparka.ZmienKat1(1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_2 && koparka.kat1 >= -45.0f)
+                    koparka.ZmienKat1(-1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_3 && koparka.kat2 <= 80.0f)
+                    koparka.ZmienKat2(1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_4 && koparka.kat2 >= -65.0f)
+                    koparka.ZmienKat2(-1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_5 && koparka.kat3 <= 60.0f)
+                    koparka.ZmienKat3(1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_6 && koparka.kat3 >= -50.0f)
+                    koparka.ZmienKat3(-1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_7)
+                    koparka.ZmienKat4(1.0f);
+                if(e.getKeyCode() == KeyEvent.VK_8)
+                    koparka.ZmienKat4(-1.0f);
+                
+                //przesunac kamery po scenie
                 if(e.getKeyChar() == 'y' && z <= 95.0f && z >= -95.0f && x <= 95.0f && x >= -95.0f)
                     przesun(1.0f);
                 if(e.getKeyChar() == 'h')
-                    przesun(-1.0f);
-
+                    przesun(-1.0f); 
                 
+                if(e.getKeyChar() == 'u')
+                    przesunKoparki(-1.0f); 
+                if(e.getKeyChar() == 'j')
+                    przesunKoparki(1.0f); 
             }
             public void keyReleased(KeyEvent e){}
             public void keyTyped(KeyEvent e){}
@@ -144,7 +174,6 @@ public class SimpleJOGL implements GLEventListener {
             image1 = ImageIO.read(getClass().getResourceAsStream("/bok.jpg"));
             image2 = ImageIO.read(getClass().getResourceAsStream("/trawa.jpg"));
             image3 = ImageIO.read(getClass().getResourceAsStream("/niebo.jpg"));
-            image4 = ImageIO.read(getClass().getResourceAsStream("/skora2.jpg"));
         }
         catch(Exception exc){
             JOptionPane.showMessageDialog(null, exc.toString());
@@ -154,7 +183,6 @@ public class SimpleJOGL implements GLEventListener {
         t1 = TextureIO.newTexture(image1, false);
         t2 = TextureIO.newTexture(image2, false);
         t3 = TextureIO.newTexture(image3, false);
-        t4 = TextureIO.newTexture(image4, false);
 
         gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_BLEND | GL.GL_MODULATE);
         gl.glEnable(GL.GL_TEXTURE_2D);
@@ -163,6 +191,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
         gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
         scena = new Scena();
+        koparka = new Koparka();
    }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -177,7 +206,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL.GL_PROJECTION);
         gl.glLoadIdentity();
-        glu.gluPerspective(120.0f, h, 0.1f, 300.0f); //Przy koparce perspektywa
+        glu.gluPerspective(100.0f, h, 0.1f, 300.0f); //Przy koparce perspektywa
 //        float ilor;
 //        if(width<=height){
 //            ilor = height/width;
@@ -226,12 +255,16 @@ public class SimpleJOGL implements GLEventListener {
         // Reset the current matrix to the "identity"
         gl.glLoadIdentity();
 
-        gl.glTranslatef(0.0f, 0.0f, -6.0f); //przesuniêcie o 6 jednostek
         gl.glRotatef(xrot, 1.0f, 0.0f, 0.0f); //rotacja wokó³ osi X
         gl.glRotatef(yrot, 0.0f, 1.0f, 0.0f); //rotacja wokó³ osi Y
+        gl.glTranslatef(0.0f, 94.0f, 1.0f); //przesuniêcie o 6 jednostek
         
         gl.glTranslatef(x, 0, z);
+        gl.glTranslatef(c, 0, v);
         scena.Rysuj(gl,t1,t2,t3);
+        
+        gl.glTranslatef(-x, -95.0f, -z);
+        koparka.Rysuj(gl);
         
         // Flush all drawing operations to the graphics card
         gl.glFlush();
