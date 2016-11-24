@@ -31,7 +31,13 @@ public class SimpleJOGL implements GLEventListener {
     static BufferedImage image1 = null, image2 = null, image3 = null, image4 = null;
     static Texture t1 = null, t2 = null, t3 = null, t4 = null;
     static Scena scena;
+    static float x, z, kat;
     
+    static void przesun(float d){
+        x-=d*Math.sin(yrot*(3.14f/180.0f));
+        z+=d*Math.cos(yrot*(3.14f/180.0f));
+    }
+        
     public static void main(String[] args) {
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
@@ -90,6 +96,12 @@ public class SimpleJOGL implements GLEventListener {
                     lightPos[3] = 0;
                 if(e.getKeyChar() == 'm')
                     lightPos[3] = 1;
+                
+                if(e.getKeyChar() == 'y' && z <= 95.0f && z >= -95.0f && x <= 95.0f && x >= -95.0f)
+                    przesun(1.0f);
+                if(e.getKeyChar() == 'h')
+                    przesun(-1.0f);
+
                 
             }
             public void keyReleased(KeyEvent e){}
@@ -218,6 +230,7 @@ public class SimpleJOGL implements GLEventListener {
         gl.glRotatef(xrot, 1.0f, 0.0f, 0.0f); //rotacja wokó³ osi X
         gl.glRotatef(yrot, 0.0f, 1.0f, 0.0f); //rotacja wokó³ osi Y
         
+        gl.glTranslatef(x, 0, z);
         scena.Rysuj(gl,t1,t2,t3);
         
         // Flush all drawing operations to the graphics card
